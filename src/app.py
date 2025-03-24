@@ -1,14 +1,14 @@
+
 import sqlite3
 import sys
-import pprint
 from getpass import getpass
-import subprocess
+from subprocess import check_output
 
 #2__
 # Configuraiton section
 
 MAX_ITEM_QTY = 10;
-
+DBFILE =  'db/mickoo.db'
 
 ### Functions 
 def banner_text(text):
@@ -26,15 +26,16 @@ def app_login():
     if CurrentUser is not None and CurrentUser.authenticated:
         render_menu_take_response("core_menu")
         return None;
-
+    print("---------------------------------------------------------");
     username = input("Enter username: ");
     password = getpass("Enter password: ");
+    print("---------------------------------------------------------");
     CurrentUser = User(username);
 
     if(CurrentUser.authenticate_user(password)):
         print(f"""
                Authentication Successful **
-              --------------------------------
+        -------------------------------------------
             ** Welcome {CurrentUser.fullname} !!! **"
         """);
         user_role = CurrentUser.get_user_roles();
@@ -331,6 +332,7 @@ def goto_main_menu():
             break;
 
 def display_welcome_banner():
+    check_output("cls", shell=True);
     print("\n===============================================")
     print("****  Welcome to Demo Marketplace *****")
     print("=================================================");
@@ -468,7 +470,7 @@ class User:
         username = self.username ;
         user_role = self.user_role;
 
-        query = f"select p.permission_name from users_roles as ur INNER JOIN users as u ON ur.user_id = u.user_id INNER JOIN roles as r ON ur.role_id = r.role_id INNER JOIN role_permissions as rp ON r.role_id = rp.role_id INNER JOIN permissions as p ON rp.permission_id = p.permission_id  where u.username = '{username}' AND r.role_name = '{user_role}' ;"
+        query = f"select p.permission_name from users_roles as ur INNER JOIN users as u ON ur.user_id = u.user_id INNER JOIN roles as r ON ur.role_id = r.role_id INNER JOIN roles_permissions as rp ON r.role_id = rp.role_id INNER JOIN permissions as p ON rp.permission_id = p.permission_id  where u.username = '{username}' AND r.role_name = '{user_role}' ;"
         
         res = Db.db_cur.execute(query);
         user_rights = res.fetchall();
@@ -586,7 +588,7 @@ class Cart:
             return(None);
 
         pay_mode_desc =  payment_modes[selected_mode-1][1];
-        print(f"You will be shortly redirected to the Payment gateway to make the payment of INR {total_amount:.2f} using ** {pay_mode_desc} ** mode...");
+        print(f"You will be shortly redirected to the Payment gateway to make the payment of  Rs. {total_amount:.2f} using ** {pay_mode_desc} ** mode...");
         del self.cart_items[:];
         input("Press any key to continue ...")
         return(None);
@@ -628,15 +630,28 @@ menu_actions = {
 }        
 
 if __name__ == "__main__":
-    app = App("Mickoo");
-    dbfile =  './mickoo.db'
-    Db = Dbc(dbfile);
-    Db.db_connect();
-    nav_stack = [];
-    CurrentUser = None;
 
-    app.run();
-    Db.db_disconnect();
-    del Db;
-    print("Good Bye !!!")
-    sys.exit(0)
+    try:
+
+        app = App("Mickoo");
+
+        Db = Dbc(DBFILE);
+        Db.db_connect();
+        nav_stack = [];
+        CurrentUser = None;
+
+        app.run();
+        Db.db_disconnect();
+        del Db;
+        print("Good Bye !!!")
+        sys.exit(0)
+    except Exception as e:
+        print(f"Error: {e}")
+        print("""
+Have you initialized the database? 
+Tip:
+Run the following command to initialize the database first and run the app again:
+              
+> sqlite3 db/mickoo.db < db/init_database.sql
+""");
+        sys.exit(1);

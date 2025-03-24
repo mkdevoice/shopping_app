@@ -1,7 +1,10 @@
--- Date: 2021-06-06 15:00:00
+
 -- Database: sqlite
 -- Author: murali krishnan
--- Description: This is a sample database schema for an e-commerce website
+-- Description: This is the database schema for an e-commerce shopping cart application.
+--    It contains tables for users, roles, permissions, categories, products, cart, cart_items, payment_modes. 
+--    It also contains sample data for users, roles, permissions, categories, products, payment_modes. 
+
 
 create table users(
     user_id integer primary key autoincrement,
@@ -25,7 +28,7 @@ create table permissions(
     active bool default 1
 );
 
-create table role_permissions(
+create table roles_permissions(
     role_permission_id integer primary key autoincrement,
     role_id integer,
     permission_id integer,
@@ -81,15 +84,22 @@ create table payment_modes(
     active bool default 1
 );
 
+-- List of payment modes available in the application.
+
 insert into payment_modes(payment_mode_name, description) values ('credit_card', 'Credit Card');
 insert into payment_modes(payment_mode_name, description) values ('debit_card', 'Debit card');
 insert into payment_modes(payment_mode_name, description) values ('net_banking', 'Netbanking');
+insert into payment_modes(payment_mode_name, description) values ('paypal', 'PayPal');
 insert into payment_modes(payment_mode_name, description) values ('upi', 'UPI');
+
+-- List of Catalog or categories
 
 insert into categories (category_name, category_desc) values ('Footwear','Shoes, slippers, sandals');
 insert into categories (category_name, category_desc) values ('Household','daily household items');
 insert into categories (category_name, category_desc) values ('Toys', 'kids toys');
 insert into categories (category_name, category_desc) values ('Sports', 'sports items');
+
+-- List of products
 
 insert into products(category_id, product_name, prod_desc, price) values (1, 'tshirt', 'round neck tshirt', 500);
 insert into products(category_id, product_name, prod_desc, price) values (1, 'shirt', 'formal shirt', 1000);
@@ -107,58 +117,66 @@ insert into products(category_id, product_name, prod_desc, price) values (5, 'ba
 insert into products(category_id, product_name, prod_desc, price) values (5, 'ball', 'cricket ball', 50);
 insert into products(category_id, product_name, prod_desc, price) values (5, 'gloves', 'cricket gloves', 500);
 
-
-insert into users(username, fullname, password) values ('murali','Murali krishnan', 'abc123');
-insert into users(username, fullname, password) values ('archana','Archana', 'abc123');
-insert into users(username, fullname, password) values ('pappu','Prathyu', 'abc123');
-insert into users(username, fullname, password) values ('vpk','VPK', 'abc123');
+-- List of roles available in the application.
 
 insert into roles(role_name, description) values ('admin', 'admin role');
 insert into roles(role_name, description) values ('user', 'user role');
 
--- admin permissions
+-- List of users in the application
+
+insert into users(username, fullname, password) values ('user1', 'user-1', 'abc123');
+insert into users(username, fullname, password) values ('user2','user-2', 'abc123');
+insert into users(username, fullname, password) values ('admin1','Administrator-1', 'abc123');
+insert into users(username, fullname, password) values ('admin2','Administrator-2', 'abc123');
+
+-- Map of Users to Roles
+
+insert into users_roles(user_id, role_id) values (1, 2);
+insert into users_roles(user_id, role_id) values (2, 2);
+insert into users_roles(user_id, role_id) values (3, 1);
+insert into users_roles(user_id, role_id) values (4, 1);
 
 -- product permissions
+
 insert into permissions(permission_name, description) values ('create_product', 'create permission');
 insert into permissions(permission_name, description) values ('update_product', 'update permission');
 insert into permissions(permission_name, description) values ('delete_product', 'delete permission');
 insert into permissions(permission_name, description) values ('view_product', 'view permission');
+
 -- category permissions
+
 insert into permissions(permission_name, description) values ('create_category', 'create category permission');
 insert into permissions(permission_name, description) values ('update_category', 'update category permission');
 insert into permissions(permission_name, description) values ('delete_category', 'delete category permission');
 insert into permissions(permission_name, description) values ('view_category', 'view category permission'); 
 
--- user permissions
-
 -- cart permissions
+
 insert into permissions(permission_name, description) values ('add_to_cart', 'add to cart permission');
 insert into permissions(permission_name, description) values ('remove_from_cart', 'remove from cart permission');
 insert into permissions(permission_name, description) values ('view_cart', 'view cart permission');
 insert into permissions(permission_name, description) values ('checkout', 'checkout permission');
 
 -- admin role permissions
-insert into role_permissions(role_id, permission_id) values (1, 1);
-insert into role_permissions(role_id, permission_id) values (1, 2);
-insert into role_permissions(role_id, permission_id) values (1, 3);
-insert into role_permissions(role_id, permission_id) values (1, 4);
-insert into role_permissions(role_id, permission_id) values (1, 5);
-insert into role_permissions(role_id, permission_id) values (1, 6);
-insert into role_permissions(role_id, permission_id) values (1, 7);
-insert into role_permissions(role_id, permission_id) values (1, 8);
 
--- users role permissions
-insert into role_permissions(role_id, permission_id) values (2, 4);
-insert into role_permissions(role_id, permission_id) values (2, 8);
-insert into role_permissions(role_id, permission_id) values (2, 9);
-insert into role_permissions(role_id, permission_id) values (2, 10);
-insert into role_permissions(role_id, permission_id) values (2, 11);
-insert into role_permissions(role_id, permission_id) values (2, 12);
+insert into roles_permissions(role_id, permission_id) values (1, 1);
+insert into roles_permissions(role_id, permission_id) values (1, 2);
+insert into roles_permissions(role_id, permission_id) values (1, 3);
+insert into roles_permissions(role_id, permission_id) values (1, 4);
+insert into roles_permissions(role_id, permission_id) values (1, 5);
+insert into roles_permissions(role_id, permission_id) values (1, 6);
+insert into roles_permissions(role_id, permission_id) values (1, 7);
+insert into roles_permissions(role_id, permission_id) values (1, 8);
 
-insert into users_roles(user_id, role_id) values (1, 2);
-insert into users_roles(user_id, role_id) values (2, 2);
-insert into users_roles(user_id, role_id) values (3, 1);
-insert into users_roles(user_id, role_id) values (4, 1);
+-- user role permissions
+
+insert into roles_permissions(role_id, permission_id) values (2, 4);
+insert into roles_permissions(role_id, permission_id) values (2, 8);
+insert into roles_permissions(role_id, permission_id) values (2, 9);
+insert into roles_permissions(role_id, permission_id) values (2, 10);
+insert into roles_permissions(role_id, permission_id) values (2, 11);
+insert into roles_permissions(role_id, permission_id) values (2, 12);
+
 
 -- Queries
 
@@ -168,8 +186,8 @@ insert into users_roles(user_id, role_id) values (4, 1);
 
 -- to obtain all permissions of all roles of all users
 
---  select u.fullname, r.role_name, p.permission_name from users_roles as ur INNER JOIN users as u ON ur.user_id = u.user_id INNER JOIN roles as r ON ur.role_id = r.role_id INNER JOIN role_permissions as rp ON r.role_id = rp.role_id INNER JOIN permissions as p ON rp.permission_id = p.permission_id ;
+--  select u.fullname, r.role_name, p.permission_name from users_roles as ur INNER JOIN users as u ON ur.user_id = u.user_id INNER JOIN roles as r ON ur.role_id = r.role_id INNER JOIN roles_permissions as rp ON r.role_id = rp.role_id INNER JOIN permissions as p ON rp.permission_id = p.permission_id ;
 
 -- get permissions of a particular user
 
--- select u.fullname, r.role_name, p.permission_name from users_roles as ur INNER JOIN users as u ON ur.user_id = u.user_id INNER JOIN roles as r ON ur.role_id = r.role_id INNER JOIN role_permissions as rp ON r.role_id = rp.role_id INNER JOIN permissions as p ON rp.permission_id = p.permission_id  where u.user_id = 1;
+-- select u.fullname, r.role_name, p.permission_name from users_roles as ur INNER JOIN users as u ON ur.user_id = u.user_id INNER JOIN roles as r ON ur.role_id = r.role_id INNER JOIN roles_permissions as rp ON r.role_id = rp.role_id INNER JOIN permissions as p ON rp.permission_id = p.permission_id  where u.user_id = 1;
