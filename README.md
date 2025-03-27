@@ -1,6 +1,8 @@
 
 # Course End Project
+
 ## PGC AIML Foundations: Programming Refresher
+
 ### part of Caltech PG program for Artificial Intelligence and Machine Learning
 
 ### Shopping App using Python 
@@ -100,13 +102,13 @@ The following are the versions of different software used in this application.
 ## <a name="_toc193729904"></a>Code repository
 The code including the sql files, documents, etc., of this application is available in the following GitHub repository. 
 
-<https://github.com/msolayap/shopping_app>
+<https://github.com/mkdevoice/shopping_app>
 ### <a name="_toc193729905"></a>folder structure
 For simplicity, the project is not so modularized. Each *class* should be developed in separate files, but instead all the code with classes, configurations, methods are placed in one single file called “app.py.” The code is organized in the following manner.
 
 |Folder|Purpose and contents|
 | :- | :- |
-|shopping\_app/src/|Main folder for application source.[ app.py](mailto:https://github.com/msolayap/shopping_app/blob/main/src/app.py) is the primary application file.|
+|shopping\_app/src/|Main folder for application source.[ app.py](mailto:https://github.com/mkdevoice/shopping_app/blob/main/src/app.py) is the primary application file.|
 |shopping\_app/src/db/|Folder holding all SQL initialization file and actual database file (.db). |
 |shopping\_app/docs/|Folder containing all project documents like problem statement, ER diagram, Application screenshots, this writeup document, etc.,|
 
